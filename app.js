@@ -5,7 +5,7 @@ var app = angular.module('app', []);
 function searchResource($http, scope, opts, params) {
     $http({
         method: 'GET',
-        url: 'http://sansara.health-samurai.io/' + opts.resourceType,
+        url: 'https://sansara.health-samurai.io/' + opts.resourceType,
         params: params
     }).then(function(resp) {
         scope[opts.key] = resp.data.entry.map((x)=>{return x.resource;});
