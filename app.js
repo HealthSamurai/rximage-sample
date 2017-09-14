@@ -29,7 +29,7 @@ function searchMeds($http, pt, scope){
 function rootCtrl($http) {
     var $scope = this;
 
-    searchResource($http, $scope, {resourceType: "Patient", key: "patients"}, {});
+    searchResource($http, $scope, {resourceType: "Patient", key: "patients"}, {_elements: 'id,name'});
 
     this.selectPt  = (pt)=>{
         $scope.pt = pt;
