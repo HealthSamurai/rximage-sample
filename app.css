@@ -1,0 +1,25 @@
+body {
+    padding: 20px 40px;
+}
+
+.patient {
+    display: block;
+    padding: 10px 20px;
+}
+
+.patient:hover {
+    background: #f1f1f1;
+}
+
+.active, .active:hover {
+    background-color: #007bff;
+    color: white;
+
+}
+.image {
+    display: inline-block;
+    margin-right: 20px;
+}
+.image img{
+    width: 300px;
+}

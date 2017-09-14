@@ -1,0 +1,26 @@
+{
+   "id":"a9ba44f1-ed77-4626-9941-0734e5247318",
+   "resourceType":"MedicationStatement",
+   "note":[
+      {
+         "text":"patient plans to start using for seasonal allergies in the Spring when pollen is in the air"
+      }
+   ],
+   "taken":"y",
+   "status":"intended",
+   "subject":{
+      "id":"9412813a-3749-42e9-b6e0-57543f3f4f79",
+      "resourceType":"Patient"
+   },
+   "medication":{
+      "CodeableConcept":{
+         "coding":[
+            {
+                "code":"828348",
+               "system":"http://www.nlm.nih.gov/research/umls/rxnorm",
+                "display":"Cyclobenzaprine hydrochloride 10 MG Oral Tablet"
+            }
+         ]
+      }
+   }
+}

@@ -1,0 +1,26 @@
+{
+   "id":"a9ba44f1-ed77-4626-9941-0734e5247318",
+   "resourceType":"MedicationStatement",
+   "note":[
+      {
+         "text":"patient plans to start using for seasonal allergies in the Spring when pollen is in the air"
+      }
+   ],
+   "taken":"y",
+   "status":"intended",
+   "subject":{
+      "id":"fe0ecce6-a577-4cde-8c02-f7c482111de8",
+      "resourceType":"Patient"
+   },
+   "medication":{
+      "CodeableConcept":{
+         "coding":[
+            {
+                "code":"309114",
+               "system":"http://www.nlm.nih.gov/research/umls/rxnorm",
+                "display":"Cephalexin 500 MG Oral Capsule"
+            }
+         ]
+      }
+   }
+}
