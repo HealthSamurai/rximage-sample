@@ -5,42 +5,45 @@
     <script src="app.js"></script>
     <link rel="stylesheet" href="app.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    
   </head>
   <body>
-    <div ng-controller="root as root">
-      <div class="row">
-        <div class="col-md-3">
-          <h1>Patients</h1>
-          <!-- <div><input class="form-control" ng-change="root.doSearch()" ng-model="root.name"/></div> -->
-          <!-- <pre>{{root.patients | json}}</pre> -->
-          <a class="patient"
-             ng-repeat="pt in root.patients track by pt.id"
-             ng-click="root.selectPt(pt)"
-             ng-class="{active: (pt.id == root.pt.id)}"
-          >
-            <img src="https://randomuser.me/api/portraits/women/{{$index}}.jpg" style="height:40px; border-radius: 50%; margin-right: 20px;"/>
-            <span> {{pt.name[0].text || "unknown"}}</span>
-          </a>
-        </div>
-        <div class="col-md-3">
-          <h1>Medications</h1>
-          <a class="patient"
-             ng-repeat="md in root.medications track by md.id"
-             ng-click="root.selectMed(md)"
-             ng-class="{active: (md.id == root.med.id)}"
-          >
-            {{ md.medication.CodeableConcept.text || md.medication.CodeableConcept.coding[0].display}}
-          </a>
-        </pre>
-        </div>
-      </div>
+    <div ng-controller="root as root" ng-app="app" >
+      <div class="container-fluid">
 
-      <hr/>
-
-      <h1>Images</h1>
-      <div class="image" ng-repeat="im in root.images.nlmRxImages track by im.id" >
-        <img ng-src="{{im.imageUrl}}"/>
+	<div class="row patiet-wrapper">
+	  <div class="image-wrapper">
+            <div class="image" ng-repeat="im in root.images.nlmRxImages track by im.id" >
+              <img ng-src="{{im.imageUrl}}"/>
+            </div>
+	  </div>
+	</div>
+	
+	<div class="row patiet-wrapper">
+          <div class="col-md-3">
+            <h1 class="header-title">Patients</h1>
+            <!-- <div><input class="form-control" ng-change="root.doSearch()" ng-model="root.name"/></div> -->
+            <!-- <pre>{{root.patients | json}}</pre> -->
+            <a class="patient"
+               ng-repeat="pt in root.patients track by pt.id"
+               ng-click="root.selectPt(pt)"
+               ng-class="{active: (pt.id == root.pt.id)}"
+               >
+              <img src="https://randomuser.me/api/portraits/women/{{$index}}.jpg" class="patient-face"/>
+              <span> {{pt.name[0].given[0] || "unknown"}}</span>
+            </a>
+          </div>
+          <div  class="col-md-9">
+            <h1 class="header-title">Medications</h1>
+            <a class="medications"
+               ng-repeat="md in root.medications track by md.id"
+               ng-click="root.selectMed(md)"
+               ng-class="{active: (md.id == root.med.id)}"
+               >
+              {{ md.medicationCodeableConcept.text || md.medicationCodeableConcept.coding[0].display}}
+            </a>             
+          </div>
+	</div>
+	<!-- <h1>Images</h1>  -->
       </div>
   </body>
 </html>

@@ -1,25 +1,75 @@
-body {
-    padding: 20px 40px;
+@font-face {
+    font-family: 'Roboto'; /* give your font a name to reference it by later on! */
+    src: url('https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900'); 
+    /* use src to point to the location of your custom font could be from your local server folder (like ./fonts/) or a remote location. */
 }
 
+body {
+    padding: 20px 40px;
+    font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+a {
+  text-decoration: none;  
+}
+
+
+.header-title {
+    font-size: 21px;
+    border-bottom: 1px solid #f4f4f4;
+    padding: 21px;
+}
+
+.medications,
 .patient {
     display: block;
     padding: 10px 20px;
+    margin: 7px 0;
+    font-size: 16px;
+    color: #474F58;
+    cursor: pointer;
 }
 
+.medications:hover,
 .patient:hover {
     background: #f1f1f1;
+    text-decoration: none;
+    color: #474F58;
+    border-radius: 2px;
+}
+
+.medications {
+  padding: 24px;  
+}
+
+.patient-face {
+  border-radius: 50%;
+  margin-right: 10px;
+  height: 50px;
+  border: 3px solid white;
+}
+
+.patiet-wrapper {
+  margin-bottom: 30px;
 }
 
 .active, .active:hover {
     background-color: #007bff;
     color: white;
-
 }
 .image {
     display: inline-block;
-    margin-right: 20px;
+    margin: 20px;
 }
 .image img{
-    width: 300px;
+    width: 240px;
+    border-radius: 8px;
+    box-shadow: 1px 1px 2px rgba(120,120,120,0.5)
+}
+.image-wrapper {
+    /* position: absolute; */
+    /* top: 10; */
+    /* z-index: 10; */
+    background-color: #f4f4f4;
+    margin: 0;
 }
