@@ -3,11 +3,11 @@ var app = angular.module('app', []);
 function searchResource ($http, scope, opts) {
     $http(
 	{	method: 'GET',
-		url: 'https://open-ic.epic.com/FHIR/api/FHIR/DSTU2/Patient/' + opts.patientId
+		url: 'https://open-ic.epic.com/FHIR/' + opts.fhirServiceUrl + '/Patient/' + opts.patientId
 	}).then(
 	    function(resp) {
 		scope[opts.key].push(resp.data);
-		console.log(resp);
+		//console.log(resp);
 	    }, 
 	    function(err) { 
 		console.error(err);
@@ -18,11 +18,11 @@ function searchMedicationStatements ($http, scope, opts) {
     
     $http({
 	method: 'GET',
-	url: 'https://open-ic.epic.com/FHIR/api/FHIR/DSTU2/MedicationStatement?patient=' + opts.patientId
+	url: 'https://open-ic.epic.com/FHIR/' + opts.fhirServiceUrl + '/MedicationStatement?patient=' + opts.patientId
     }).then(
 	function(resp) {
 	    scope[opts.key] = resp.data.entry.map((x)=>{return x.resource;});
-	    console.log(scope[opts.key]);
+	    //console.log(scope[opts.key]);
             //console.log(resp);
 	}, 
 	function(err) { 
@@ -44,9 +44,27 @@ function searchRxImage($http, scope, med) {
 function searchMeds($http, pt, scope){
 }
 
+function getQueryVariable(variable) {
+    var query = window.location.search.substring(1);
+    var vars = query.split('&');
+    for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split('=');
+        if (decodeURIComponent(pair[0]) == variable) {
+            return decodeURIComponent(pair[1]);
+        }
+    }
+    variable
+}
+
 
 function rootCtrl($http) {
     var $scope = this;
+    var fhirServiceUrl = getQueryVariable("fhirServiceUrl");
+    var patientId = getQueryVariable("patientId");
+
+    console.log(fhirServiceUrl);
+    console.log(patientId);
+    
     $scope.patients = [];
     
     
@@ -73,15 +91,15 @@ function rootCtrl($http) {
        TiJ59owlXkDJCHUrYIjshK5eGNI5bO14fBmpv5vssdw8B
     */
     
-    searchResource($http, $scope, {patientId: 'TiJ59owlXkDJCHUrYIjshK5eGNI5bO14fBmpv5vssdw8B', key: "patients"});
-    searchResource($http, $scope, {patientId: 'Tbt3KuCY0B5PSrJvCu2j-PlK.aiHsu2xUjUM8bWpetXoB', key: "patients"});
-    searchResource($http, $scope, {patientId: 'TUKRxL29bxE9lyAcdTIyrWC6Ln5gZ-z7CLr2r-2SY964B', key: "patients"});
+    searchResource($http, $scope, {fhirServiceUrl: fhirServiceUrl, patientId: patientId, key: "patients"});
+    // searchResource($http, $scope, {patientId: 'Tbt3KuCY0B5PSrJvCu2j-PlK.aiHsu2xUjUM8bWpetXoB', key: "patients"});
+    // searchResource($http, $scope, {patientId: 'TUKRxL29bxE9lyAcdTIyrWC6Ln5gZ-z7CLr2r-2SY964B', key: "patients"});
 
     
     
     this.selectPt  = (pt)=>{
         $scope.pt = pt;
-        searchMedicationStatements($http, $scope, {key: "medications", patientId: pt.id});
+        searchMedicationStatements($http, $scope, {fhirServiceUrl: fhirServiceUrl, patientId: pt.id, key: "medications"});
     };
     
     this.selectMed  = (med)=>{
