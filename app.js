@@ -23,7 +23,6 @@ function searchMedicationStatements ($http, scope, opts) {
 	url: 'https://open-ic.epic.com/FHIR/' + opts.fhirServiceUrl + '/MedicationStatement?patient=' + opts.patientId
     }).then(function(resp) {
 	scope.medications = resp.data.entry.filter((x)=>{return x.resource.resourceType == "MedicationStatement"}).map((x)=>{return x.resource;});
-	console.log(scope.medications);
     }, printError);
 }
 
