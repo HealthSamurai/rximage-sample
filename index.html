@@ -10,11 +10,23 @@
     <div ng-controller="root as root" ng-app="app" >
       <div class="container-fluid">
 
-	<div class="row patiet-wrapper">
-	  <div class="image-wrapper">
-            <div class="image" ng-repeat="im in root.images.nlmRxImages track by im.id" >
-              <img ng-src="{{im.imageUrl}}"/>
-            </div>
+	<div ng-if="root.images.nlmRxImages.length == 0">
+	  <div class="row patiet-wrapper">
+	    <div class="image-wrapper">
+	      <div class="image">
+		<h4>No medication images</h4>
+              </div>
+	    </div>
+	  </div>
+	</div>
+
+	<div ng-if="root.images.nlmRxImages.length != 0">
+	  <div class="row patiet-wrapper">
+	    <div class="image-wrapper">
+              <div class="image" ng-repeat="im in root.images.nlmRxImages track by im.id" >
+		<img ng-src="{{im.imageUrl}}"/>
+              </div>
+	    </div>
 	  </div>
 	</div>
 	
@@ -30,7 +42,7 @@
           <div  class="col-md-9">
             <h1 class="header-title">Medications</h1>
 	    <div ng-if="root.medications.length == 0">
-	      <h4 class="no-medication">No medication</h4>
+	      <h4 class="no-medication">No medications</h4>
 	    </div>
 	    <div ng-if="root.medications.length != 0">
               <a class="medications"
