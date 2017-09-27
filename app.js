@@ -1,33 +1,42 @@
 var app = angular.module('app', []);
 
-function searchResource ($http, scope, opts) {
-    $http(
-	{	method: 'GET',
-		url: 'https://open-ic.epic.com/FHIR/' + opts.fhirServiceUrl + '/Patient/' + opts.patientId
-	}).then(
-	    function(resp) {
-		scope[opts.key].push(resp.data);
-		//console.log(resp);
-	    }, 
-	    function(err) { 
-		console.error(err);
-	    });
+function printError (err) {
+    console.error(err);
+}
+
+function randomUser($http, scope) {
+    $http({
+	method: 'GET',
+	url: 'https://randomuser.me/api/?gender=' + scope.pt.gender
+    }).then(function(resp) {
+	scope.userAvatar = resp.data.results[0].picture.large;
+    }, printError);
+}
+
+function patientAge(patient) {
+    return (new Date()).getFullYear() - (new Date(patient.birthDate)).getFullYear();
 }
 
 function searchMedicationStatements ($http, scope, opts) {
-    
     $http({
 	method: 'GET',
 	url: 'https://open-ic.epic.com/FHIR/' + opts.fhirServiceUrl + '/MedicationStatement?patient=' + opts.patientId
-    }).then(
-	function(resp) {
-	    scope[opts.key] = resp.data.entry.map((x)=>{return x.resource;});
-	    //console.log(scope[opts.key]);
-            //console.log(resp);
-	}, 
-	function(err) { 
-	    console.error(err);
-	});
+    }).then(function(resp) {
+	scope["medications"] = resp.data.entry.map((x)=>{return x.resource;});
+	//scope["medications"] = [];
+    }, printError);
+}
+
+function searchPatient ($http, scope, opts) {
+    $http({
+	method: 'GET',
+	url: 'https://open-ic.epic.com/FHIR/' + opts.fhirServiceUrl + '/Patient/' + opts.patientId
+    }).then(function(resp) {
+	scope.pt = resp.data;
+	scope.ptAge = patientAge(scope.pt);
+	randomUser($http, scope);
+	searchMedicationStatements($http, scope, opts);
+    }, printError);
 }
 
 function searchRxImage($http, scope, med) {
@@ -37,11 +46,7 @@ function searchRxImage($http, scope, med) {
         params: {rxcui: med.medicationCodeableConcept.coding[0].code}
     }).then(function(resp) {
         scope.images = resp.data;
-    }, function(err) { console.error(err); });
-}
-
-
-function searchMeds($http, pt, scope){
+    }, printError);
 }
 
 function getQueryVariable(variable) {
@@ -62,12 +67,6 @@ function rootCtrl($http) {
     var fhirServiceUrl = getQueryVariable("fhirServiceUrl");
     var patientId = getQueryVariable("patientId");
 
-    console.log(fhirServiceUrl);
-    console.log(patientId);
-    
-    $scope.patients = [];
-    
-    
     /* Patients
        with medications
        
@@ -91,18 +90,20 @@ function rootCtrl($http) {
        TiJ59owlXkDJCHUrYIjshK5eGNI5bO14fBmpv5vssdw8B
     */
     
-    searchResource($http, $scope, {fhirServiceUrl: fhirServiceUrl, patientId: patientId, key: "patients"});
+    //searchResource($http, $scope, {fhirServiceUrl: fhirServiceUrl, patientId: patientId, key: "patients"});
     // searchResource($http, $scope, {patientId: 'Tbt3KuCY0B5PSrJvCu2j-PlK.aiHsu2xUjUM8bWpetXoB', key: "patients"});
     // searchResource($http, $scope, {patientId: 'TUKRxL29bxE9lyAcdTIyrWC6Ln5gZ-z7CLr2r-2SY964B', key: "patients"});
-
+    searchPatient($http, $scope, {fhirServiceUrl: fhirServiceUrl, patientId: patientId});
+    //console.log($scope.pt);
+    //searchMedicationStatements($http, $scope, {fhirServiceUrl: fhirServiceUrl, patientId: $scope.pt.id});
     
     
-    this.selectPt  = (pt)=>{
-        $scope.pt = pt;
-        searchMedicationStatements($http, $scope, {fhirServiceUrl: fhirServiceUrl, patientId: pt.id, key: "medications"});
-    };
+    // this.selectPt  = (pt)=>{
+    //     $scope.pt = pt;
+    //     searchMedicationStatements($http, $scope, {fhirServiceUrl: fhirServiceUrl, patientId: pt.id, key: "medications"});
+    // };
     
-    this.selectMed  = (med)=>{
+    this.selectMed = (med) => {
         $scope.med = med;
         searchRxImage($http, $scope, med);
     };
